@@ -3,19 +3,22 @@ export default {
   data() {
     return {
       textData: "",
-      emptyOkText: 0,
-      emptyNoText: 0,
-      emptyOkByte: 0,
-      emptyNoByte: 0,
+      textLength: {
+        emptyOkText: 0,
+        emptyNoText: 0,
+        emptyOkByte: 0,
+        emptyNoByte: 0,
+
+      },
     }
   },
   created() {
     this.$watch('textData', (newValue, oldValue) => {
-      this.emptyOkText = newValue.length
-      this.emptyNoText = newValue.trim().length
+      this.textLength.emptyOkText = newValue.length
+      this.textLength.emptyNoText = newValue.trim().length
 
-      this.emptyOkByte = newValue.split("").reduce((acc, cur) => (cur.charCodeAt() > 127 ? (acc += 2) : (acc += 1)), 0);
-      this.emptyNoByte = newValue.trim().split("").reduce((acc, cur) => (cur.charCodeAt() > 127 ? (acc += 2) : (acc += 1)), 0);
+      this.textLength.emptyOkByte = newValue.split("").reduce((acc, cur) => (cur.charCodeAt() > 127 ? (acc += 2) : (acc += 1)), 0);
+      this.textLength.emptyNoByte = newValue.trim().split("").reduce((acc, cur) => (cur.charCodeAt() > 127 ? (acc += 2) : (acc += 1)), 0);
     },
       {
         flush: true
@@ -42,11 +45,11 @@ export default {
     <h1>글자수세기</h1>
     <div class="box">
       <div class="string-length">
-        <textarea v-model="textData" placeholder="내용을 입력해주세요"></textarea>
+        <textarea @input="textData = $event.target.value" placeholder="내용을 입력해주세요"></textarea>
       </div>
       <div class="str-info">
-        <p>공백 포함 <span>{{ emptyOkText }}</span> 자 | <span>{{ emptyOkByte }}</span> byte</p>
-        <p>공백 제외 <span>{{ emptyNoText }}</span> 자 | <span>{{ emptyNoByte }}</span> byte</p>
+        <p>공백 포함 <span>{{ textLength.emptyOkText }}</span> 자 | <span>{{ textLength.emptyOkByte }}</span> byte</p>
+        <p>공백 제외 <span>{{ textLength.emptyNoText }}</span> 자 | <span>{{ textLength.emptyNoByte }}</span> byte</p>
       </div>
       <div class="btn-area">
         <button @click="allCopy">전체복사</button>
